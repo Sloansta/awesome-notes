@@ -16,9 +16,12 @@
     </div>
     <div class="create-note">
         <form class="note-form">
-            <label>Note title: <input type="text"></label>
-            <label>Note body: <textarea name="note-body" id="" cols="30" rows="10"></textarea></label>
+            <label>Note title: <textarea name="note-title" cols="30" rows="10" id="note-body"></textarea></label>
+            <label>Note body: <textarea name="note-body" cols="30" rows="10" id="note-body"></textarea></label>
         </form>
+        <button class="submit-note" onclick="addNote()">Add Note</button>
     </div>
+
+    <script src="index.js"></script>
 </body>
 </html>
