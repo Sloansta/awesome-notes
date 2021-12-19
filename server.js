@@ -3,23 +3,43 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 const PORT = process.env.PORT || 3001;
-const data = loadJSON('db.json');
+const data = loadJSON('db/db.json');
+const dataArr = [];
 
-app.use(express.static(path.join(__dirname, 'src')));
+if(dataArr.length - 1 > 0)
+    dataArr.length = data.length - 1;
+else 
+    dataArr.length = 0;
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './src/index.html'));
+    res.sendFile(path.join(__dirname, './public/index.html'));
 });
+
 
 app.get('/notes', (req, res) => {
-    res.send(data.table);
+    res.sendFile(path.join(__dirname, './public/notes.html'));
 });
 
-app.post('/add-note', (req, res) => {
+app.get('/api/notes', (req, res) => {
+    res.send(data);
+}); 
+
+app.post('/api/notes', (req, res) => {
     console.log(req.body);
-    createNewNote(req.body);
+    req.body.id = uuidv4();
+    data.push(req.body);
+    saveJSON('db/db.json', data);
+    res.json(req.body);
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+    res.send('Deleting ' + req.params.id);
+    console.log(req.params.id);
 });
 
 app.listen(PORT, () => {
@@ -28,15 +48,10 @@ app.listen(PORT, () => {
 });
 
 function initNotes() {
-    data.table.forEach(element => {
-        console.log(element);
+    data.forEach(element => {
+        dataArr.push(element);
+        console.log(dataArr);
     });
-}
-
-function createNewNote(obj) {
-    data.table.push(obj);
-    saveJSON('db.json', data);
-    console.log(data.table);
 }
 
 function loadJSON(filename = '') {
