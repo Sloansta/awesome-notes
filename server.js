@@ -13,6 +13,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './src/index.html'));
 });
 
+app.get('/notes', (req, res) => {
+    res.send(data.table);
+});
+
 app.post('/add-note', (req, res) => {
     console.log(req.body);
     createNewNote(req.body);

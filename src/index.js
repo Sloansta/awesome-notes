@@ -1,6 +1,23 @@
 const addBtn = document.querySelector('.submit-note');
 const noteForm = document.querySelector('.note-form');
+const displayArea = $('.side-bar');
 
+function displayNote(note) {
+    note.forEach(element => {
+        displayArea.append(`
+            <div class="card">
+                <h4>${element.noteTitle}</h4>
+                <p>${element.noteBody}</p>
+            </div>
+        `);
+    });
+}
+
+function getNote() {
+    $.get('http://localhost:3001/notes', data => {
+        displayNote(data);
+    });
+}
 
 function addNote() {
     const noteTitle = noteForm.querySelector('[name="note-title"]').value;
@@ -21,5 +38,7 @@ function addNote() {
         console.log(data);
     });
 }
+
+getNote();
 
 //addBtn.addEventListener('submit', addNote);
